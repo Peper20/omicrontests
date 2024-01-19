@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 
 import {Header, active_enum} from './Header.jsx'
 import Tests from './Tests.jsx'
+import Login from './Login.jsx'
 
 
 function DefaultPage(props){
@@ -50,9 +51,9 @@ export function ProfilePage() {
 
 export function LoginPage() {
     return (
-        <DefaultPage>
-            login
-        </DefaultPage>
+        <Container>
+            <Login></Login>
+        </Container>
     )
 }
 

@@ -43,7 +43,7 @@ function Navigation({active}){
     )
 }
 
-function Logo(){
+export function Logo(){
     return (
         <>
             <img
@@ -52,7 +52,7 @@ function Logo(){
                 height="39"
                 className="d-inline-block align-top"
             />
-            <Navbar.Brand href="#home" style={{marginLeft: '6px'}}>OmicronTests</Navbar.Brand>
+            <Navbar.Brand href="/tests" style={{marginLeft: '6px'}}>OmicronTests</Navbar.Brand>
         </>
     )
 }
