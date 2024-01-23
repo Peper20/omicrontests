@@ -1,20 +1,23 @@
 import axios from 'axios'
 
 
-import {ROOT_AUTH_URL, ROOT_USERS_URL} from '../../settings.js'
+import {ROOT_AUTH_URL} from '../../settings.js'
 
 
 
 
-export function getMe() {
-  return axios.get(
-    ROOT_USERS_URL + '/me',
-    {
-      headers: {
-        'accept': 'application/json',
-      },
-      withCredentials: true,
-    }
-  )
+export function login(username, password) {
+    return axios.post(
+        ROOT_AUTH_URL + '/login',
+        new URLSearchParams({
+          'username': username,
+          'password': password,
+        }),
+        {
+            headers: {
+                'accept': 'application/json'
+            },
+            withCredentials: true,
+        }
+      )
 }
-

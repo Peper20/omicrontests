@@ -1,11 +1,12 @@
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
-import {useState} from 'react'
-import axios from 'axios';
+import {useEffect, useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 
 
 import main_logo from '../assets/imgs/main_logo.png' // <img src={main_logo} style={{width: '40px'}}/>
-import {ROOT_AUTH_URL, ROOT_USERS_URL} from '../settings.js'
+import {login} from '../assets/scripts/auth.js'
 
 
 const loginRegisterEnum = {
@@ -18,8 +19,8 @@ function FormLogo(){
         <div style={{textAlign: 'center'}}>
         <img
             src={main_logo}
-            width="60"
-            height="60"
+            width="60px"
+            height="60px"
             className="d-inline-block align-top"
         />
         <p style={{marginLeft: '6px', marginTop: '2px', fontSize: '27px'}} className='mb-3'>OmicronTests</p>
@@ -27,8 +28,11 @@ function FormLogo(){
     )
 }
 
-function LoginForm({onChange, onSend}){
+function LoginForm({onChange}){
+    const [show, setShow] = useState(false)
     const [validated, setValidated] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
+    const navigate = useNavigate()
 
     function validate(event){
         const form = event.currentTarget;
@@ -37,7 +41,25 @@ function LoginForm({onChange, onSend}){
           event.stopPropagation()
           setValidated(true)
         } else {
-            onSend(event)
+            loginSubmit(event).then(
+                (response) => {
+                    navigate('/tests')
+                }
+            ).catch(
+                (error) => {
+                    switch (error.code) {
+                        case 'ERR_BAD_REQUEST':
+                            setErrorMessage('Неверный email или пароль.')
+                            setShow(true)
+                            break;
+                    
+                        default:
+                            setErrorMessage('Произошла непредвиденная ошибка.')
+                            setShow(true)
+                            break;
+                    }
+                }
+            )
         }
     }
 
@@ -56,6 +78,9 @@ function LoginForm({onChange, onSend}){
         <Button variant="primary" type="submit" className='mt-3'>
             Войти
         </Button>
+        <Alert show={show} onClose={() => setShow(false)} variant="danger" dismissible className='mt-3 mb-0'>
+            {errorMessage}
+        </Alert>
         <hr />
         <div>Нет аккаунта? — <a href="" onClick={onChange}>зарегестрируйтесь</a></div>
         </Form>
@@ -72,6 +97,7 @@ function RegisterForm({onChange, onSend}){
           event.stopPropagation()
           setValidated(true)
         } else {
+            // 232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323
             onSend(event)
         }
     }
@@ -101,44 +127,18 @@ function RegisterForm({onChange, onSend}){
     )
 }
 
-function login(username, password) {
-    axios.post(
-        ROOT_AUTH_URL + '/login',
-        new URLSearchParams({
-        //   'grant_type': '',
-          'username': username,
-          'password': password,
-        //   'scope': '',
-        //   'client_id': '',
-        //   'client_secret': ''
-        }),
-        {
-          headers: {
-            'accept': 'application/json'
-          },
-          withCredentials: true,
-        }
-      ).then(
-      (response) => {
-        return true
-      }
-    ).catch((error) => {
-      return false
-    })
-  }
 
+function loginSubmit(event){
+    event.preventDefault();
+    return login(event.currentTarget.elements[0].value, event.currentTarget.elements[1].value)
+}
 
 export default function Login(){
     const [lor, setLor] = useState(loginRegisterEnum.login)
 
     function onChange(e){
         e.preventDefault()
-        setLor((lor + 1) % 2)
-    }
-
-    function onSend(event){
-        event.preventDefault();
-        login(event.currentTarget.elements[0].value, event.currentTarget.elements[1].value)
+        setLor((lor + 1) % 2) // changes to another one
     }
 
     
@@ -146,8 +146,8 @@ export default function Login(){
         <div className="border col-sm-9 col-md-6 col-lg-5 col-xl-4 mx-auto mt-5 p-4">
             <FormLogo></FormLogo>
             {lor ===  loginRegisterEnum.login
-                ?<LoginForm onSend={onSend} onChange={onChange}></LoginForm>
-                :<RegisterForm onSend={onSend} onChange={onChange}></RegisterForm>
+                ?<LoginForm onChange={onChange}></LoginForm>
+                :<RegisterForm onChange={onChange}></RegisterForm>
             }
         </div>
     )
