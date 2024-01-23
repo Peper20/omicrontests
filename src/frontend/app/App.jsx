@@ -1,46 +1,23 @@
-import axios from 'axios'
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 
 
 import './App.css'
-import {TestsPage, ProfilePage, CatalogPage, GroupsPage, LoginPage, AnyPage} from './components/pages.jsx'
-import {ROOT_AUTH_URL, ROOT_USERS_URL} from './settings.js'
+import Loading from './components/Loading.jsx'
+import MyRoutes from './components/MyRoutes.jsx'
+import {getMe} from './assets/scripts/auth.js'
 
 
-function getMe() {
-  axios.get(ROOT_USERS_URL + '/me').then(
-    (response) => {
-      return response.data
-    }
-  ).catch((error) => {
-    return null
-  })
-}
 
+const USER_LOADING_STATUS = 0
 
 export default function App() {
-  const location = useLocation()
-  const navigate = useNavigate()
-  
-  const [user, setUser] = useState(null)
-  useEffect(() => {() => setUser(getMe())}, [])
-
-  if (location.pathname !== 'login' && !user){
-    useEffect(() => {navigate('/login')}, [])
-  }
-
+  const [user, setUser] = useState(USER_LOADING_STATUS)
+  useEffect(() => {getMe().then((response) => {setUser(response.data)}).catch((error) => {setUser(null)})}, [])
 
   return (
     <>
-      <Routes>
-        <Route path="*" element={<AnyPage />} />
-        <Route path="tests" element={<TestsPage />} />
-        <Route path="profile" element={<ProfilePage />} />
-        <Route path="catalog" element={<CatalogPage />} />
-        <Route path="groups" element={<GroupsPage />} />
-        <Route path="login" element={<LoginPage />} />
-      </Routes>
+      {user === USER_LOADING_STATUS ? <Loading></Loading> : <MyRoutes user={user}></MyRoutes>}
     </>
   )
 }
+

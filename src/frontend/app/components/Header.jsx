@@ -1,7 +1,8 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import Dropdown from 'react-bootstrap/Dropdown';
+import NavItem from 'react-bootstrap/NavItem';
 
 
 import main_logo from '../assets/imgs/main_logo.png' // <img src={main_logo} style={{width: '40px'}}/>
@@ -17,19 +18,13 @@ export const active_enum = {
 
 function Profile(){
     return (
-        <NavDropdown title="Профиль" id="profile-dropdown">
-            <NavDropdown.Item href="/profile">Настройки</NavDropdown.Item>
-            <NavDropdown.Item>Выход</NavDropdown.Item>
-        </NavDropdown>
-    )
-}
-
-function Alerts(){
-    return (
-        <NavDropdown title="Уведомления" id="alerts-dropdown">
-            <NavDropdown.Item href="#action/3.1">Alert 1</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.1">Alert 2</NavDropdown.Item>
-        </NavDropdown>
+        <Dropdown as={NavItem}>
+            <Dropdown.Toggle className='active' as={Nav.Link}>Профиль</Dropdown.Toggle>
+            <Dropdown.Menu>
+                <Dropdown.Item href="/profile">Настройки</Dropdown.Item>
+                <Dropdown.Item>Выход</Dropdown.Item>
+            </Dropdown.Menu>
+        </Dropdown>
     )
 }
 
@@ -66,7 +61,6 @@ export function Header({active}) {
         <Navbar.Collapse id="basic-navbar-nav">
             <Navigation active={active}></Navigation>
             <Nav>
-                <Alerts></Alerts>
                 <Profile></Profile>
             </Nav>
         </Navbar.Collapse>
