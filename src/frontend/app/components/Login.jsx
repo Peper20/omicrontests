@@ -2,11 +2,11 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import {useEffect, useState} from 'react'
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 
 import main_logo from '../assets/imgs/main_logo.png' // <img src={main_logo} style={{width: '40px'}}/>
-import {login} from '../assets/scripts/auth.js'
+import {login, register} from '../assets/scripts/auth.js'
 
 
 const loginRegisterEnum = {
@@ -29,19 +29,23 @@ function FormLogo(){
 }
 
 function LoginForm({onChange}){
-    const [show, setShow] = useState(false)
     const [validated, setValidated] = useState(false)
-    const [errorMessage, setErrorMessage] = useState('')
     const navigate = useNavigate()
+    const [show, setShow] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
 
     function validate(event){
-        const form = event.currentTarget;
+        const form = event.currentTarget
+        const email = form.elements[0].value
+        const password = form.elements[1].value
+
+        event.preventDefault()
+
         if (form.checkValidity() === false) {
-          event.preventDefault()
-          event.stopPropagation()
-          setValidated(true)
+            event.stopPropagation()
+            setValidated(true)
         } else {
-            loginSubmit(event).then(
+            login(email, password).then(
                 (response) => {
                     navigate('/tests')
                 }
@@ -64,8 +68,8 @@ function LoginForm({onChange}){
     }
 
     return (
-        <Form noValidate validated={validated} className='d-grid' onSubmit={validate}>
-        <Form.Group className="mb-3" controlId="loginForm">
+        <Form noValidate validated={validated} className='d-grid' onSubmit={validate} name="login">
+        <Form.Group className="mb-3" controlId="email">
             <Form.Label>Электронная почта</Form.Label>
             <Form.Control required type="email" placeholder="example@mail.ru" />
         </Form.Group>
@@ -87,24 +91,60 @@ function LoginForm({onChange}){
     )
 }
 
-function RegisterForm({onChange, onSend}){
+function RegisterForm({onChange}){
     const [validated, setValidated] = useState(false)
+    const navigate = useNavigate()
+    const [show, setShow] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
+
 
     function validate(event){
-        const form = event.currentTarget;
+        const form = event.currentTarget
+        const email = form.elements[0].value
+        const password = form.elements[1].value
+
+        event.preventDefault()
+        
         if (form.checkValidity() === false) {
-          event.preventDefault()
-          event.stopPropagation()
-          setValidated(true)
+            event.stopPropagation()
+            setValidated(true)
         } else {
-            // 232323232323232323232323232323232323232323232323232323232323232323232323232323232323232323
-            onSend(event)
+            register(email, password).then(
+                (response) => {
+                    login(email, password).then(
+                        (response) => {
+                            navigate('/tests')
+                        }
+                    ).catch(
+                        (error) => {
+                            console.log(error)
+                            setErrorMessage('Произошла непредвиденная ошибка.')
+                            setShow(true)
+                        }
+                    )
+                }
+            ).catch(
+                (error) => {
+                    switch (error.code) {
+                        case 'ERR_BAD_REQUEST':
+                            setErrorMessage('Аккаунт с указанной почтой уже существует.')
+                            setShow(true)
+                            break;
+                    
+                        default:
+                            console.log(error)
+                            setErrorMessage('Произошла непредвиденная ошибка.')
+                            setShow(true)
+                            break;
+                    }
+                }
+            )
         }
     }
 
     return (
-        <Form noValidate validated={validated} className='d-grid' onSubmit={validate}>
-        <Form.Group className="mb-3" controlId="loginForm">
+        <Form noValidate validated={validated} className='d-grid' onSubmit={validate} name="register">
+        <Form.Group className="mb-3" controlId="email">
             <Form.Label>Электронная почта</Form.Label>
             <Form.Control required type="email" placeholder="example@mail.ru" />
         </Form.Group>
@@ -121,6 +161,9 @@ function RegisterForm({onChange, onSend}){
         <Button variant="primary" type="submit" className='mt-3'>
             Зарегестрироваться
         </Button>
+        <Alert show={show} onClose={() => setShow(false)} variant="danger" dismissible className='mt-3 mb-0'>
+            {errorMessage}
+        </Alert>
         <hr />
         <div>Уже есть аккаунт? — <a href="" onClick={onChange}>войдите</a></div>
         </Form>
@@ -128,17 +171,12 @@ function RegisterForm({onChange, onSend}){
 }
 
 
-function loginSubmit(event){
-    event.preventDefault();
-    return login(event.currentTarget.elements[0].value, event.currentTarget.elements[1].value)
-}
-
 export default function Login(){
     const [lor, setLor] = useState(loginRegisterEnum.login)
 
     function onChange(e){
         e.preventDefault()
-        setLor((lor + 1) % 2) // changes to another one
+        setLor((lor + 1) % 2) // it changes to another one
     }
 
     

@@ -10,11 +10,11 @@ export function getMe() {
     return axios.get(
         ROOT_USERS_URL + '/me',
         {
-        headers: {
-            'accept': 'application/json',
+            headers: {
+                'accept': 'application/json',
+            },
+            withCredentials: true,
         },
-        withCredentials: true,
-        }
     )
 }
 
