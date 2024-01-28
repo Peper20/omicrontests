@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from os import environ
 
 
@@ -39,6 +39,41 @@ db_config=DbConfig(
     environ.get('password'),
     environ.get('host'),
     environ.get('name'),
+)
+
+# }
+
+
+
+# CORS config {
+
+@dataclass
+class CORSConfig:
+    allow_origins: list[str]
+    allow_credentials: bool
+    allow_methods: list[str]
+    allow_headers: list[str]
+
+    def unpack(self):
+        return asdict(self)
+
+
+cors_config = CORSConfig(
+    allow_origins=[
+        'http://localhost',
+        'http://localhost:8080',
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+    ],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=[
+        'Set-Cookie',
+        'Access-Control-Allow-Headers',
+        'Content-Type',
+        'Authorization',
+        'Access-Control-Allow-Origin',
+    ],
 )
 
 # }

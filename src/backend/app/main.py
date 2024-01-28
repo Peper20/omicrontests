@@ -4,7 +4,7 @@ from uvicorn import run as _run
 
 
 from .features import features
-
+from .settings import cors_config 
 
 
 
@@ -12,13 +12,7 @@ def create_app() -> FastAPI:
     app = FastAPI()
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost",
-    "http://localhost:8080",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["Set-Cookie", "Access-Control-Allow-Headers", 'Content-Type', 'Authorization', 'Access-Control-Allow-Origin'],
+        **(dict(cors_config.unpack()))
     )
     
     for feature in features:
