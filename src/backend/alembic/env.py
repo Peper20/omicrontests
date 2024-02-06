@@ -22,9 +22,9 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 
 from app.settings import db_config
-from app.auth import models # init models
-from app.database import Base
+from app.database import Base, init_all_models
 
+init_all_models()
 config.set_section_option(config.config_ini_section, 'DB_URL', db_config.url)
 target_metadata = Base.metadata
 

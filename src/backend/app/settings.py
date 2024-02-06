@@ -6,6 +6,14 @@ from dotenv import load_dotenv; load_dotenv()
 
 
 
+
+# general settings {
+
+DEBUG: bool = True
+
+# }
+
+
 # crypto area {
 
 @dataclass
@@ -13,10 +21,15 @@ class CryptoConfig:
     secret: str
     algorithm: str = 'HS256'
 
+if not DEBUG:
+    crypto_config = CryptoConfig(
+        secret=environ.get('secret'),
+    )
 
-crypto_config = CryptoConfig(
-    secret=environ.get('secret'),
-)
+else:
+    crypto_config = CryptoConfig(
+        secret='secret',
+    )
 
 # }
 
@@ -34,12 +47,21 @@ class DbConfig:
     def url(self):
         return f'postgresql+asyncpg://{self.user}:{self.password}@{self.host}/{self.name}'
 
-db_config=DbConfig(
-    environ.get('user'),
-    environ.get('password'),
-    environ.get('host'),
-    environ.get('name'),
-)
+if not DEBUG:
+    db_config=DbConfig(
+        environ.get('user'),
+        environ.get('password'),
+        environ.get('host'),
+        environ.get('name'),
+    )
+
+else:
+    db_config=DbConfig(
+        environ.get('debug_user'),
+        environ.get('debug_password'),
+        environ.get('debug_host'),
+        environ.get('debug_name'),
+    )
 
 # }
 
@@ -77,3 +99,4 @@ cors_config = CORSConfig(
 )
 
 # }
+
