@@ -18,10 +18,24 @@ router = APIRouter(
 
 
 @router.get('/preview-quizzes')
-async def preview(
+async def preview_quizzes(
     user: User = Depends(current_active_user),
     session: AbstractAsyncSession = Depends(),
 ):
     repo = QuizRepo(session)
 
     return [quiz.title for quiz, in await repo.get_users_quzzes()]
+
+
+@router.post('/create-new')
+async def create_new(
+    user: User = Depends(current_active_user),
+    session: AbstractAsyncSession = Depends(),
+):
+    repo = QuizRepo(session)
+
+    await repo.create_new()
+
+    await session.commit()
+
+
