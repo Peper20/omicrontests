@@ -3,7 +3,7 @@ import {Routes, Route, useNavigate, useLocation} from 'react-router-dom';
 
 
 import {DefaultPage} from './common/DefaultPage.jsx'
-import {Header, active_enum} from './common/Header.jsx'
+import {active_enum} from './common/Header.jsx'
 import {OverviewPage} from './quizzes/Pages.jsx'
 import {LoginPage, RegisterPage} from './auth/Pages.jsx'
 
@@ -63,6 +63,7 @@ export default function MyRoutes({user}){
       <Routes>
         <Route path="*" element={<NotFoundPage />} />
         <Route path="tests" element={<OverviewPage />} />
+        <Route path="tests/:id" element={<OverviewPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="catalog" element={<CatalogPage />} />
         <Route path="groups" element={<GroupsPage />} />

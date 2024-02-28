@@ -9,7 +9,7 @@ export function DefaultPage(props){
     return (
         <>
             <Header active={props.active}></Header>
-            <Container>
+            <Container className='mt-4'>
                 {props.children}
             </Container>
         </>

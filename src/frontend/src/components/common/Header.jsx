@@ -67,7 +67,7 @@ export function Logo(){
 
 export function Header({active}) {
     return (
-        <Navbar expand="lg" className="bg-body-tertiary mb-4">
+        <Navbar expand="lg" className="bg-body-tertiary">
             <Container>
                 <Logo></Logo>
                 <Navbar.Collapse id="basic-navbar-nav">
