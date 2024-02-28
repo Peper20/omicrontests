@@ -1,32 +1,15 @@
-import Container from 'react-bootstrap/Container';
 import {useEffect} from 'react'
 import {Routes, Route, useNavigate, useLocation} from 'react-router-dom';
 
 
-import {Header, active_enum} from './Header.jsx'
-import Tests from './Tests.jsx'
+import {DefaultPage} from './common/DefaultPage.jsx'
+import {Header, active_enum} from './common/Header.jsx'
+import {OverviewPage} from './quizzes/Pages.jsx'
 import {LoginPage, RegisterPage} from './auth/Pages.jsx'
 
 
 
-function DefaultPage(props){
-    return (
-        <>
-            <Header active={props.active}></Header>
-            <Container>
-                {props.children}
-            </Container>
-        </>
-    )
-}
 
-function TestsPage() {
-    return (
-        <DefaultPage active={active_enum.tests}>
-            <Tests></Tests>
-        </DefaultPage>
-    )
-}
 
 function CatalogPage() {
     return (
@@ -79,7 +62,7 @@ export default function MyRoutes({user}){
     return (
       <Routes>
         <Route path="*" element={<NotFoundPage />} />
-        <Route path="tests" element={<TestsPage />} />
+        <Route path="tests" element={<OverviewPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="catalog" element={<CatalogPage />} />
         <Route path="groups" element={<GroupsPage />} />

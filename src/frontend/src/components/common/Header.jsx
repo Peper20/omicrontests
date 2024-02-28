@@ -6,8 +6,8 @@ import NavItem from 'react-bootstrap/NavItem';
 import {useNavigate} from 'react-router-dom';
 
 
-import main_logo from '../assets/imgs/main_logo.png'
-import {logout} from '../assets/scripts/auth.js'
+import main_logo from '../../assets/imgs/main_logo.png'
+import {logout} from '../../assets/scripts/auth.js'
 
 
 

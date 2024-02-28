@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 
 import {Login} from './Login.jsx'
 import {Register} from './Register.jsx'
-import Loading from '../Loading.jsx'
+import Loading from '../common/Loading.jsx'
 
 
 

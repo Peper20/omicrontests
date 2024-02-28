@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 
 import './App.css'
-import Loading from './components/Loading.jsx'
+import Loading from './components/common/Loading.jsx'
 import MyRoutes from './components/MyRoutes.jsx'
 import {getMe} from './assets/scripts/users.js'
 

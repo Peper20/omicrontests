@@ -3,12 +3,12 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 
-import last_visit_logo from '../assets/imgs/last_visit_logo.png'
-import created_logo from '../assets/imgs/created_logo.png'
+import last_visit_logo from '../../assets/imgs/last_visit_logo.png'
+import created_logo from '../../assets/imgs/created_logo.png'
 
 
 
-export default function Tests(){
+export default function Overview(){
     return (
         <Row xs={1} md={2} lg={3} xl={4} xxl={5} className="g-4">
             {Array.from({ length: 5 }).map((_, idx) => (
