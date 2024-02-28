@@ -1,12 +1,12 @@
 import Container from 'react-bootstrap/Container';
-import { useEffect } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import {useEffect} from 'react'
+import {Routes, Route, useNavigate, useLocation} from 'react-router-dom';
 
 
 import {Header, active_enum} from './Header.jsx'
 import Tests from './Tests.jsx'
-import Login from './Login.jsx'
-import Loading from './Loading.jsx'
+import {LoginPage, RegisterPage} from './auth/Pages.jsx'
+
 
 
 function DefaultPage(props){
@@ -52,18 +52,6 @@ function ProfilePage() {
     )
 }
 
-function LoginPage({user}) {
-    const navigate = useNavigate()
-    if (user){
-        useEffect(() => {navigate('/tests')}, [])
-        return <Loading></Loading>
-    }
-    return (
-        <Container>
-            <Login></Login>
-        </Container>
-    )
-}
 
 function NotFoundPage() {
     return (
@@ -77,9 +65,14 @@ function NotFoundPage() {
 
 export default function MyRoutes({user}){
     const navigate = useNavigate()
+    const location = useLocation()
   
     if (!user){
-      useEffect(() => {navigate('/login')}, [])
+        useEffect(() => {
+            if (location.pathname !== '/register' && location.pathname !== '/login') {
+                navigate('/login')
+            }
+        }, [])
     }
   
   
@@ -91,6 +84,7 @@ export default function MyRoutes({user}){
         <Route path="catalog" element={<CatalogPage />} />
         <Route path="groups" element={<GroupsPage />} />
         <Route path="login" element={<LoginPage user={user} />} />
+        <Route path="register" element={<RegisterPage user={user} />} />
       </Routes>
     )
   }
