@@ -34,3 +34,4 @@ function QuizPage({id}){
         </>
     )
 }
+
