@@ -16,8 +16,8 @@ async def create_db_and_tables():
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
-        # if users:
-        #     await conn.execute(insert(User), users)
+        if users:
+            await conn.execute(insert(User), users)
 
         # if quizzes:
         #     await conn.execute(insert(Quiz), quizzes)
